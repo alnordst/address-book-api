@@ -1,45 +1,59 @@
 import json
 
 
-
 class Contact(object):
     """
     Contact object to provide validation of form data.
     """
 
     def __init__(self, form):
+        """
+        Initialize contact and populate fields using form data.
+        """
         self.data = {}
         self.update(form)
 
 
     def __str__(self):
+        """
+        Output contact in json format.
+        """
         return json.dumps(self.data, sort_keys = True)
 
 
     def update(self, form):
-       if 'name' in form:
-           self.data['name'] = form['name']
-       if 'address' in form:
-           self.data['address'] = form['address']
-       if 'city' in form:
-           self.data['city'] = form['city']
-       if 'state' in form:
-           self.verify_state(form['state'])
-       if 'zip_code' in form:
-           self.verify_zip_code(form['zip_code'])
-       if 'phone' in form:
-           self.verify_phone(form['phone'])
+        """
+        Populate fields using form data.
+        """
+        if 'name' in form:
+            self.data['name'] = form['name']
+        if 'address' in form:
+            self.data['address'] = form['address']
+        if 'city' in form:
+            self.data['city'] = form['city']
+        if 'state' in form:
+            self.verify_state(form['state'])
+        if 'zip_code' in form:
+            self.verify_zip_code(form['zip_code'])
+        if 'phone' in form:
+            self.verify_phone(form['phone'])
 
-       self.remove_empties()
+        self.remove_empties()
 
 
     def remove_empties(self):
-       for key in dict(self.data):
-           if self.data[key] is None:
-               del self.data[key]
+        """
+        Remove unused keys (keys with value set to None)
+        """
+        for key in dict(self.data):
+            if self.data[key] is None:
+                del self.data[key]
 
 
     def verify_state(self, state):
+        """
+        Verify state is 2 character string, store it if valid
+        """
         if state and state.isalpha() and len(state) == 2:
             self.data['state'] = state.upper()
         else:
@@ -47,6 +61,9 @@ class Contact(object):
 
 
     def verify_zip_code(self, zip_code):
+        """
+        Verify zip code is 5 digit integer, store it if valid
+        """
         if zip_code and str(zip_code).isdecimal() and len(str(zip_code)) == 5:
             self.data['zip_code'] = zip_code
         else:
@@ -54,6 +71,9 @@ class Contact(object):
 
 
     def verify_phone(self, phone):
+        """
+        Verify phone number is valid, store it if so
+        """
         valid_phone = False
 
         if phone:

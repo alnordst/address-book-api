@@ -8,9 +8,9 @@ class Handler(object):
     Handles operations on elasticsearch.
     """
 
-    def __init__(self, index_name, wipe_index = False):
+    def __init__(self, index_name, port = 9200, wipe_index = False):
         self.index_name = index_name
-        self.es = Elasticsearch()
+        self.es = Elasticsearch(port = port)
 
         if wipe_index and self.es.indices.exists(self.index_name):
             self.es.indices.delete(index = self.index_name)
